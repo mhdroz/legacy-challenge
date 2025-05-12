@@ -2,11 +2,13 @@ import os
 from chromadb import PersistentClient
 from openai import OpenAI
 from dotenv import load_dotenv
+import streamlit as st
 
+openai_api_key = st.secrets["api"]["OPENAI_API_KEY"]
 load_dotenv()
 
 
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai_client = OpenAI(api_key=openai_api_key)
 
 #chroma_client = PersistentClient(path=os.getenv('PERSIST_DIR'))
 

@@ -5,12 +5,14 @@ from app.rag import Retriever
 import app.prompt as prompts
 import os
 from openai import OpenAI
+import streamlit as st
 
+openai_api_key = st.secrets["api"]["OPENAI_API_KEY"]
 router = APIRouter()
 risk_model = RiskModel(os.getenv("MODEL_DIR"))
 retriever  = Retriever()
 
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai_client = OpenAI(api_key=openai_api_key)
 
 class TextIn(BaseModel):
     text:str
