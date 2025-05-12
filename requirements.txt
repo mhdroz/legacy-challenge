@@ -5,3 +5,4 @@ torch
 chromadb
 python-dotenv
 openai
+streamlit
