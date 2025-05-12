@@ -1,15 +1,9 @@
-# Streamlit front‑end for Safety‑First Triage POC
-# Save this file as streamlit_app.py and run:  streamlit run streamlit_app.py
-
 import os
 import requests
 import streamlit as st
 from streamlit.components.v1 import html
 
-# -----------------------------------------------------------------------------
-# Config
-# -----------------------------------------------------------------------------
-API_URL = os.getenv("TRIAGE_API_URL", "http://localhost:8000")  # Point to FastAPI
+API_URL = os.getenv("TRIAGE_API_URL", "http://localhost:8000") 
 
 # Simple mapping for risk bucket → color
 RISK_COLORS = {
@@ -20,27 +14,15 @@ RISK_COLORS = {
     4: "red",
 }
 
-#USERNAME = st.secrets.get("auth", {}).get("username", "admin")
-#PASSWORD = st.secrets.get("auth", {}).get("password", "changeme")
-
-def _get_creds():
-    """Retrieve creds from Streamlit secrets or env vars; fallback to defaults."""
-    try:
-        user = st.secrets["auth"]["username"]
-        pwd = st.secrets["auth"]["password"]
-    except Exception:
-        user = os.getenv("TRIAGE_UI_USER", "admin")
-        pwd = os.getenv("TRIAGE_UI_PWD", "changeme")
-    return user, pwd
-
-USERNAME, PASSWORD = _get_creds()
+USERNAME = st.secrets.get("auth", {}).get("username", "admin")
+PASSWORD = st.secrets.get("auth", {}).get("password", "changeme")
 
 
 def login_gate():
     if "auth_ok" in st.session_state and st.session_state["auth_ok"]:
         return True
 
-    st.title("🔒 Login")
+    st.title("Login")
     user = st.text_input("Username")
     pwd = st.text_input("Password", type="password")
     if st.button("Log in"):
@@ -76,9 +58,7 @@ if st.button("Assess & Advise", type="primary"):
             st.error(f"Error contacting API: {e}")
             st.stop()
 
-    # ------------------------------------------------------------------
     # Display results
-    # ------------------------------------------------------------------
     bucket = data["risk"]["risk score"]
     conf = data["risk"]["confidence"] * 100
     color = RISK_COLORS.get(bucket, "gray")

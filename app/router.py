@@ -25,7 +25,6 @@ def predict(user_text: TextIn):
 @router.post("/advise")
 def advise(inp: TextIn):
     risk_score, confidence, _ = risk_model.score(inp.text)
-    #bucket = ["Low","Moderate","High","Severe","Critical"][lid]  # adjust mapping
     snippets = retriever.get(inp.text, k=3)
     prompt = prompts.build_prompt(inp.text, risk_score, confidence, snippets)
 
